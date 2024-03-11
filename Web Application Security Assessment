@@ -1,0 +1,8 @@
+Description: Conducted a comprehensive security assessment of a web application to identify and exploit vulnerabilities.
+
+Key Contributions:
+  - Implemented Apache Tomcat in a controlled environment to assess security vulnerabilities in the web application.
+
+  - Leveraged Kali Linux and penetration testing techniques to exploit vulnerabilities, specifically targeting the Apache Tomcat Manager Application Deployer Authenticated Code Execution vulnerability.
+
+  - Successfully gained unauthorized access and control over the victim's device, demonstrating proficiency in identifying and exploiting security weaknesses in web applications.
