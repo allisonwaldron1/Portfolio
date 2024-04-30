@@ -1,0 +1,128 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class hill {
+    public static void main(String[] args) {
+        // Define the ciphertext you want to decrypt
+        String ciphertext = "HJLMYYB"; // Replace with your ciphertext
+        String fileName = "C:\\Users\\allyw\\eclipse\\java-2023-033\\Project2\\src\\words2.txt";
+        // Define the set of possible numbers for the 3x3 key
+        int[] possibleNumbers = {0, 4, 5, 6, 8, 11, 16, 21, 22, 25};
+
+        // Brute-force decryption using the given set of numbers
+        for (int a : possibleNumbers) {
+            for (int b : possibleNumbers) {
+                for (int c : possibleNumbers) {
+                    for (int d : possibleNumbers) {
+                        for (int e : possibleNumbers) {
+                            for (int f : possibleNumbers) {
+                                for (int g : possibleNumbers) {
+                                    for (int h : possibleNumbers) {
+                                        for (int i : possibleNumbers) {
+                                            // Create a potential decryption key matrix
+                                            int[][] decryptionKeyMatrix = {
+                                                {a, b, c},
+                                                {d, e, f},
+                                                {g, h, i}
+                                            };
+
+                                       
+
+                                            // Attempt decryption with the current key matrix
+                                            String plaintext = decryptHillCipher(ciphertext, decryptionKeyMatrix);
+
+                                            // Check if the decrypted plaintext looks like valid text
+                                            if (isText(plaintext,fileName)) {
+                                                System.out.println("Possible Decryption Key Found:");
+                                                printMatrix(decryptionKeyMatrix);
+                                                System.out.println("Decrypted Plaintext:");
+                                                System.out.println(plaintext);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+ // Decrypt a ciphertext using a given 3x3 key matrix
+    private static String decryptHillCipher(String ciphertext, int[][] keyMatrix) {
+        int blockSize = 3; // Size of each block for decryption
+        StringBuilder plaintext = new StringBuilder();
+
+        for (int i = 0; i < ciphertext.length(); i += blockSize) {
+            if (i + blockSize <= ciphertext.length()) {
+                String block = ciphertext.substring(i, i + blockSize);
+                int[] numericalValues = new int[blockSize];
+
+                // Convert the block of ciphertext characters to numerical values
+                for (int j = 0; j < blockSize; j++) {
+                    numericalValues[j] = block.charAt(j) - 'A';
+                }
+
+                // Decrypt the block using the given key matrix
+                int[] decryptedValues = new int[blockSize];
+                for (int j = 0; j < blockSize; j++) {
+                    for (int k = 0; k < blockSize; k++) {
+                        decryptedValues[j] += keyMatrix[j][k] * numericalValues[k];
+                    }
+                    decryptedValues[j] %= 26; // Apply modulo 26
+                    if (decryptedValues[j] < 0) {
+                        decryptedValues[j] += 26; // Ensure the result is positive
+                    }
+                }
+
+                // Convert numerical values back to characters
+                for (int j = 0; j < blockSize; j++) {
+                    char decryptedChar = (char) (decryptedValues[j] + 'A');
+                    plaintext.append(decryptedChar);
+                }
+            }
+        }
+
+        return plaintext.toString();
+    }
+
+
+    // Check if the given text looks like valid English text
+    private static boolean isText(String text,String fileName) {
+    	  try {
+              // Read the list of words from the text file
+    		  
+              BufferedReader reader = new BufferedReader(new FileReader(fileName));
+              String line;
+              boolean matchFound = false;
+              String firstThreeCharacters = text.substring(0, Math.min(text.length(), 3));
+
+              while ((line = reader.readLine()) != null) {
+                  if (line.length() >= 3 && line.substring(0, 3).equals(firstThreeCharacters)&& text.contains(line)) {
+                      matchFound = true;
+                      break;
+                  }
+              }
+
+              reader.close();
+
+              return matchFound;
+          } catch (IOException e) {
+              e.printStackTrace();
+              return false;
+          }
+      }
+    
+
+    // Helper method to print a 3x3 matrix
+    private static void printMatrix(int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
